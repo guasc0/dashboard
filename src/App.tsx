@@ -15,7 +15,7 @@ function App() {
     const [data, setData] = useState();
     const [tramDataSolros, setTramDataSolros] = useState();
     const [tramDataMunk, setTramDataMunk] = useState();
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=6e9629053cbb4418b10134951221105&q=${searchResult}&days=10&aqi=yes&alerts=no/`;
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=6e9629053cbb4418b10134951221105&q=${searchResult}&days=10&aqi=yes&alerts=no/`;
     useEffect(() => {
         axios
             .get(url)
