@@ -8,7 +8,6 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
     let solrosList: any[] = [];
     let munkList: any[] = [];
     const setLists = (list: any, listToSet: any) => {
-        console.log(list);
         if (list.Departure) {
             list.Departure.forEach((dep: any) => {
                 listToSet.push(dep.rtTime);
@@ -20,62 +19,71 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
     const calcDepTime = (departures: any) => {
         solrosList = [];
         departures.forEach((dep: any, index: number) => {
+            let formatedDate = dep.date.replace(/-/g, "/");
+            console.log(formatedDate);
+            console.log(formatedDate + 'T' + dep.rtTime)
             let startTime = new Date();
             let endTime = dep.rtTime ? new Date(dep.date + 'T' + dep.rtTime) : new Date(dep.date + 'T' + dep.time) ;
             let difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
             let resultInMinutes = Math.round(difference / 60000);
-            //console.log(time);
-            //tramdData.tramData.Departure[index].rtTime = resultInMinutes.toString();
-            //setDepTime((depTime: { rtTime: string; }[]) => [...depTime, depTime[index].rtTime = resultInMinutes.toString() + '2']);
             resultInMinutes = resultInMinutes -1
             if (resultInMinutes === 0) {
                 solrosList.push('Nu');
             } else if (resultInMinutes < 0 || isNaN(resultInMinutes)){
                 solrosList.splice(index, 1);
-                tramdDataSolros.Departure.splice(index, 1);
+                departures.splice(index, 1);
             } else {
-                solrosList.push(resultInMinutes.toString())
+                solrosList.push(resultInMinutes)
             }
         })
         setDepTime(solrosList);
-        console.log(depTime);
 
     }
     setInterval(() => {
-        calcDepTime(tramdDataSolros.tramdDataSolros.Departure);
-        calcDepTime(tramDataMunk.Departure);
+        calcDepTime(tramdDataSolros.tramDataSolros.Departure);
+        calcDepTime(tramdDataSolros.tramDataMunk.Departure);
     }, 5000);
     let tramNr = 0;
     return (
         <StyledWeather>
-          <h4> Trams and stuff !!!!!!!!!!</h4>
+            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                <h4>Solrosgatan</h4>
+                <h4>Munkebäckstorget</h4>
+            </div>
             <div style={{display: "flex"}}>
-                <div>
+                <div style={{display: 'flex'}}>
                     <table>
                         <th>Linje</th>
                         <th>Ändhållplats</th>
-                        <th>Avgår om (min)</th>
+                        <th>Om (min)</th>
                         {tramdDataSolros.tramDataSolros.Departure.map((dep: any, index: number) => {
                             return (
                                 <>
                                     <tr>
-                                        <td><Board id={index.toString()}>{setTramNr(dep.name.substring(dep.name.length -1, dep.name.length), index.toString())}</Board></td>
-                                        <td style={{paddingRight: 20}}>{setTramEnd(dep.direction)}</td>
+                                        <td><Board id={index.toString()}>{setTramNr(dep.Product[0].line, index.toString())}</Board></td>
+                                        <td style={{paddingRight: 10}}>{setTramEnd(dep.direction)}</td>
                                         <td style={{width: 150}}>{depTime[index]}</td>
                                     </tr>
                                 </>
                             );
                         })}
+                    </table>
+                    <table>
+                        <th>Linje</th>
+                        <th>Ändhållplats</th>
+                        <th>Om (min)</th>
                         {tramdDataSolros.tramDataMunk.Departure.map((dep: any, index: number) => {
-                            return (
-                                <>
-                                    <tr>
-                                        <td><Board id={index.toString()}>{setTramNr(dep.name.substring(dep.name.length -1, dep.name.length), index.toString())}</Board></td>
-                                        <td style={{paddingRight: 20}}>{setTramEnd(dep.direction)}</td>
-                                        <td style={{width: 150}}>{depTime[index]}</td>
-                                    </tr>
-                                </>
-                            );
+                            if (dep.Product[0].line !== '5') {
+                                return (
+                                    <>
+                                        <tr>
+                                            <td><Board id={index.toString()}>{setTramNr(dep.Product[0].line, index.toString())}</Board></td>
+                                            <td style={{paddingRight: 10}}>{setTramEnd(dep.direction)}</td>
+                                            <td style={{width: 100}}>{depTime[index]}</td>
+                                        </tr>
+                                    </>
+                                );
+                            }
                         })}
                     </table>
                 </div>
@@ -96,9 +104,14 @@ const setTramNr = (tramNr: string, id: string) => {
         nr.style.backgroundColor = 'white'
         nr.style.color = 'black'
     }
+    if (tramNr === '17' && nr) {
+        nr.style.backgroundColor = 'black'
+        nr.style.color = '#41fa00'
+    }
     return tramNr;
 }
 const setTramEnd = (name: string): string => {
+    console.log(name);
     let endStation = '';
     switch (name) {
         case 'Virginsgatan (Göteborg kn)':
@@ -119,6 +132,14 @@ const setTramEnd = (name: string): string => {
         case 'Göteborg Varmfrontsgatan':
             endStation = 'Länsmansgården';
             break;
+        case 'Hinnebäcksgatan (Göteborg kn)':
+            endStation = 'Tuve'
+            break;
+        case 'Tynnered Opaltorget (Göteborg kn)':
+            endStation = 'Tynnered'
+            break;
+        default:
+            endStation = 'Extra insatt'
     }
     return endStation;
 }
@@ -129,7 +150,8 @@ const Board = styled.div`
   color: white;
   margin: auto;
   text-align: center;
-  width: 40px;
+  width: 30px;
+  
 `;
 
 const StyledWeather = styled.div`
@@ -169,7 +191,7 @@ const StyledWeather = styled.div`
     text-align: left;
     padding: 3px;
     font-weight: bold;
-    font-size: 17px;
+    font-size: 15px;
   }
   
   th {
@@ -180,6 +202,7 @@ const StyledWeather = styled.div`
   
   table {
     margin: 10px;
+    width: 300px;
   }
   p {
     margin: 0 20px 0 0px;

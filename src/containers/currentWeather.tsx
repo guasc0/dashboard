@@ -25,9 +25,6 @@ export const CurrentWeather: React.FC<any> = ({data, city}) => {
                 <div style={{display: "flex", justifyContent: 'flex-start', width:650}}>
                     <CurrentWeatherCard data={data}/>
                     <HourlyWeatherCard data={data.forecast.forecastday[0]}/>
-                    <div style={{marginLeft: 30, marginTop: 30}}>
-                        <Clock value={value} renderNumbers={true}/>
-                    </div>
                 </div>
 
             }
