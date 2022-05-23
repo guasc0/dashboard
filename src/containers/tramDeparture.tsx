@@ -92,6 +92,10 @@ const setTramNr = (tramNr: string, id: string) => {
     if (tramNr === '5' && nr) {
         nr.style.backgroundColor = 'red'
     }
+    if (tramNr === '1' && nr) {
+        nr.style.backgroundColor = 'white'
+        nr.style.color = 'black'
+    }
     return tramNr;
 }
 const setTramEnd = (name: string): string => {
