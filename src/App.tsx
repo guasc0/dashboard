@@ -18,8 +18,6 @@ function App() {
     const url = `https://api.weatherapi.com/v1/forecast.json?key=6e9629053cbb4418b10134951221105&q=${searchResult}&days=10&aqi=yes&alerts=no/`;
     useEffect(() => {
         setInterval( () => {
-
-        }, 60000 * 30)
             axios
                 .get(url)
                 .then((result) => {
@@ -29,6 +27,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
+        }, 60000 * 30)
     }, []);
     useEffect(() => {
         setInterval(() => {
