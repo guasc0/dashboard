@@ -10,7 +10,6 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  //background-color: black;
 }
 
 code {
@@ -58,4 +57,8 @@ code {
 .tram-nr-red {
   color: red;
   font-size: 15px;
+}
+
+.clock {
+  margin-bottom: 5px;
 }

@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import { GetTrams } from "../utils/helpers";
 
-const BASE_URL = "/bin/rest.exe/v2, API VERSION: 1.10.1, HOST: https://api.vasttrafik.se"
 
 export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
-    const [depTime, setDepTime] = useState<string[]>([]);
+    const [solDepList, setSolDepList] = useState<string[]>([]);
+    const [munkDepList, setMunkDepList] = useState<string[]>([]);
     let solrosList: any[] = [];
     let munkList: any[] = [];
     const setLists = (list: any, listToSet: any) => {
@@ -14,37 +15,64 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
             })
         }
     }
-    setLists(tramdDataSolros, solrosList);
-    setLists(tramDataMunk, munkList);
-    const calcDepTime = (departures: any) => {
+    setLists(tramdDataSolros.tramDataSolros, solrosList);
+    setLists(tramdDataSolros.tramDataMunk, munkList);
+    const calcSolDepTime = (departures: any) => {
         solrosList = [];
         departures.forEach((dep: any, index: number) => {
-            let formatedDate = dep.date.replace(/-/g, "/");
-            console.log(formatedDate);
-            console.log(formatedDate + 'T' + dep.rtTime)
             let startTime = new Date();
+            if (navigator.platform && /iPad/.test(navigator.platform)) {
+                startTime.setHours(startTime.getHours() + 2);
+            }
             let endTime = dep.rtTime ? new Date(dep.date + 'T' + dep.rtTime) : new Date(dep.date + 'T' + dep.time) ;
             let difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
             let resultInMinutes = Math.round(difference / 60000);
-            resultInMinutes = resultInMinutes -1
+            resultInMinutes = resultInMinutes -1;
             if (resultInMinutes === 0) {
                 solrosList.push('Nu');
             } else if (resultInMinutes < 0 || isNaN(resultInMinutes)){
+                console.log(resultInMinutes);
                 solrosList.splice(index, 1);
                 departures.splice(index, 1);
             } else {
                 solrosList.push(resultInMinutes)
             }
         })
-        setDepTime(solrosList);
+        setSolDepList(solrosList);
+    }
 
+    const calcMunkDepTime = (departures: any) => {
+        munkList = [];
+        departures.forEach((dep: any, index: number) => {
+            let formatedDate = dep.date.replace(/-/g, "/");
+            let startTime = new Date();
+            if (navigator.platform && /iPad/.test(navigator.platform)) {
+                startTime.setHours(startTime.getHours() + 2);
+            }
+            let endTime = dep.rtTime ? new Date(dep.date + 'T' + dep.rtTime) : new Date(dep.date + 'T' + dep.time) ;
+            let difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+            let resultInMinutes = Math.round(difference / 60000);
+            resultInMinutes = resultInMinutes -1;
+            if (resultInMinutes === 0) {
+                munkList.push('Nu');
+            } else if (resultInMinutes < 0 || isNaN(resultInMinutes)){
+                departures.splice(index, 1);
+                munkList.splice(index, 1);
+            } else {
+                munkList.push(Math.round(resultInMinutes))
+            }
+        })
+        setMunkDepList(munkList);
     }
     setInterval(() => {
-        calcDepTime(tramdDataSolros.tramDataSolros.Departure);
-        calcDepTime(tramdDataSolros.tramDataMunk.Departure);
+        calcSolDepTime(tramdDataSolros.tramDataSolros.Departure);
+        calcMunkDepTime(tramdDataSolros.tramDataMunk.Departure);
     }, 5000);
-    let tramNr = 0;
     return (
+        <>
+        <div style={{paddingLeft: 20, margin: 0}}>
+            <h2 style={{color: "white"}}>Spårvagns avgångar</h2>
+        </div>
         <StyledWeather>
             <div style={{display: 'flex', justifyContent: 'space-around'}}>
                 <h4>Solrosgatan</h4>
@@ -60,9 +88,11 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
                             return (
                                 <>
                                     <tr>
-                                        <td><Board id={index.toString()}>{setTramNr(dep.Product[0].line, index.toString())}</Board></td>
+                                        <td><Board
+                                            id={index.toString() + 'solros'}>{setTramNr(dep.Product[0].line, index.toString(), 'solros')}</Board>
+                                        </td>
                                         <td style={{paddingRight: 10}}>{setTramEnd(dep.direction)}</td>
-                                        <td style={{width: 150}}>{depTime[index]}</td>
+                                        <td style={{width: 100}}>{solDepList[index]}</td>
                                     </tr>
                                 </>
                             );
@@ -77,9 +107,11 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
                                 return (
                                     <>
                                         <tr>
-                                            <td><Board id={index.toString()}>{setTramNr(dep.Product[0].line, index.toString())}</Board></td>
+                                            <td><Board
+                                                id={index.toString() + 'munk'}>{setTramNr(dep.Product[0].line, index.toString(), 'munk')}</Board>
+                                            </td>
                                             <td style={{paddingRight: 10}}>{setTramEnd(dep.direction)}</td>
-                                            <td style={{width: 100}}>{depTime[index]}</td>
+                                            <td style={{width: 100}}>{munkDepList[index]}</td>
                                         </tr>
                                     </>
                                 );
@@ -88,12 +120,12 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
                     </table>
                 </div>
             </div>
-        </StyledWeather>
+        </StyledWeather></>
     );
 }
 
-const setTramNr = (tramNr: string, id: string) => {
-    let nr = document.getElementById(id);
+const setTramNr = (tramNr: string, id: string, table: string) => {
+    let nr = document.getElementById(id + table);
     if (tramNr === '3' && nr) {
         nr.style.backgroundColor = 'blue'
     }
@@ -106,12 +138,11 @@ const setTramNr = (tramNr: string, id: string) => {
     }
     if (tramNr === '17' && nr) {
         nr.style.backgroundColor = 'black'
-        nr.style.color = '#41fa00'
+        nr.style.color = '#f5a631'
     }
     return tramNr;
 }
 const setTramEnd = (name: string): string => {
-    console.log(name);
     let endStation = '';
     switch (name) {
         case 'Virginsgatan (Göteborg kn)':
@@ -161,7 +192,7 @@ const StyledWeather = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   width: 640px;
-  height: 400px;
+  height: 330px;
   background-color: rgba(255, 255, 255, 0.35);
   padding: 5px 5px 0 5px;
   margin-top: 20px;

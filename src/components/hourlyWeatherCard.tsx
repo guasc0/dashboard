@@ -41,6 +41,7 @@ const WeatherImage = styled.img`
 
 const Ptag = styled.p`
   margin: 0 0 10px 0;
+  width: 52px;
 `;
 
 const StyledWeather = styled.div`
@@ -49,7 +50,7 @@ const StyledWeather = styled.div`
   //justify-content: flex-start;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
-  //width: 400px;
+  width: 520px;
   height: 200px;
   background-color: rgba(255, 255, 255, 0.35);
   padding: 5px 5px 0 5px;
