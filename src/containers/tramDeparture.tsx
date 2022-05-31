@@ -9,7 +9,7 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
     let solrosList: any[] = [];
     let munkList: any[] = [];
     const setLists = (list: any, listToSet: any) => {
-        if (list.Departure) {
+        if (list) {
             list.Departure.forEach((dep: any) => {
                 listToSet.push(dep.rtTime);
             })

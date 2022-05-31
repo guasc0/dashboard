@@ -65,7 +65,7 @@ function App() {
         <ToastContainer />
         <CurrentWeather data={data} city={searchResult}/>
         <ThreeDayWeather data={data} city={searchResult}/>
-          {tramDataSolros &&
+          {tramDataSolros && tramDataMunk &&
               <TramDeparture tramDataSolros={tramDataSolros} tramDataMunk={tramDataMunk} />
           }
       </div>
