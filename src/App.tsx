@@ -27,7 +27,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000 * 30)
+        }, 60000 * 13)
     }, []);
     useEffect(() => {
         setInterval(() => {
