@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { GetTrams } from "../utils/helpers";
 
 
-export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
+export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => {
     const [solDepList, setSolDepList] = useState<string[]>([]);
     const [munkDepList, setMunkDepList] = useState<string[]>([]);
     let solrosList: any[] = [];
@@ -15,8 +15,8 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
             })
         }
     }
-    setLists(tramdDataSolros.tramDataSolros, solrosList);
-    setLists(tramdDataSolros.tramDataMunk, munkList);
+    setLists(tramDataSolros, solrosList);
+    setLists(tramDataMunk, munkList);
     const calcSolDepTime = (departures: any) => {
         solrosList = [];
         departures.forEach((dep: any, index: number) => {
@@ -65,8 +65,8 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
         setMunkDepList(munkList);
     }
     setInterval(() => {
-        calcSolDepTime(tramdDataSolros.tramDataSolros.Departure);
-        calcMunkDepTime(tramdDataSolros.tramDataMunk.Departure);
+        calcSolDepTime(tramDataSolros.Departure);
+        calcMunkDepTime(tramDataMunk.Departure);
     }, 5000);
     return (
         <>
@@ -84,7 +84,7 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
                         <th>Linje</th>
                         <th>Ändhållplats</th>
                         <th>Om (min)</th>
-                        {tramdDataSolros.tramDataSolros.Departure.map((dep: any, index: number) => {
+                        {tramDataSolros.Departure.map((dep: any, index: number) => {
                             return (
                                 <>
                                     <tr>
@@ -102,7 +102,7 @@ export const TramDeparture: React.FC<any> = (tramdDataSolros, tramDataMunk) => {
                         <th>Linje</th>
                         <th>Ändhållplats</th>
                         <th>Om (min)</th>
-                        {tramdDataSolros.tramDataMunk.Departure.map((dep: any, index: number) => {
+                        {tramDataMunk.Departure.map((dep: any, index: number) => {
                             if (dep.Product[0].line !== '5') {
                                 return (
                                     <>
