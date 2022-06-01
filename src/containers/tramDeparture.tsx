@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {v4 as uuidv4} from 'uuid';
 
 export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => {
     const [solDepList, setSolDepList] = useState<string[]>([]);
@@ -94,12 +95,13 @@ export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => 
                         <th>Linje</th>
                         <th>Ändhållplats</th>
                         <th>Om (min)</th>
+                        <tbody>
                         {tramDataSolros.Departure.map((dep: any, index: number) => {
                             return (
                                 <>
                                     <tr>
-                                        <td><Board
-                                            id={index.toString() + 'solros'}>{setTramNr(dep.Product[0].line, index.toString(), 'solros')}</Board>
+                                        <td>
+                                            <Board id={uuidv4() + 'solros' + new Date().getTime()}>{setTramNr(dep.Product[0].line, index.toString(), 'solros')}</Board>
                                         </td>
                                         <td style={{paddingRight: 10}}>{setTramEnd(dep.direction)}</td>
                                         <td style={{width: 100}}>{solDepList[index]}</td>
@@ -107,18 +109,20 @@ export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => 
                                 </>
                             );
                         })}
+                        </tbody>
                     </table>
                     <table>
                         <th>Linje</th>
                         <th>Ändhållplats</th>
                         <th>Om (min)</th>
+                        <tbody>
                         {tramDataMunk.Departure.map((dep: any, index: number) => {
                             if (dep.Product[0].line !== '5') {
                                 return (
                                     <>
                                         <tr>
-                                            <td><Board
-                                                id={index.toString() + 'munk'}>{setTramNr(dep.Product[0].line, index.toString(), 'munk')}</Board>
+                                            <td>
+                                                <Board id={uuidv4() + 'munk' + new Date().getTime()}>{setTramNr(dep.Product[0].line, index.toString(), 'munk')}</Board>
                                             </td>
                                             <td style={{paddingRight: 10}}>{setTramEnd(dep.direction)}</td>
                                             <td style={{width: 100}}>{munkDepList[index]}</td>
@@ -127,6 +131,7 @@ export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => 
                                 );
                             }
                         })}
+                        </tbody>
                     </table>
                 </div>
             </div>

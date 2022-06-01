@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, {useState} from "react";
 import {Hour} from "../models";
 import {calculateWindSpeed, formatHourList, windDirection} from "../utils/helpers";
+import {v4 as uuidv4} from "uuid";
 
 export const HourlyWeatherCard: React.FC<any> = ({data}) => {
     //const [hourList, setHourList] = useState<any>([]);
@@ -19,7 +20,7 @@ export const HourlyWeatherCard: React.FC<any> = ({data}) => {
                     {hourList.map((hour: any, index: number) => {
                         const hours = hour.time.substring(11, 13);
                         return (
-                                <div style={{margin:10}} key={index}>
+                                <div style={{margin:10}} key={uuidv4() + new Date().getTime()}>
                                     <Ptag>{hours}</Ptag>
                                     <WeatherImage src={hour.condition.icon} alt="hello"/>
                                     <Ptag>{hour.temp_c.toFixed(0)}℃</Ptag>
