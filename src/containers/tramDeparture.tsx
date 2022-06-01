@@ -144,6 +144,10 @@ const setTramNr = (tramNr: string, id: string, table: string) => {
     if (tramNr === '3' && nr) {
         nr.style.backgroundColor = 'blue'
     }
+    if (tramNr === 'Buss 3E' && nr) {
+        tramNr = '3E'
+        nr.style.backgroundColor = 'blue'
+    }
     if (tramNr === '5' && nr) {
         nr.style.backgroundColor = 'red'
     }
