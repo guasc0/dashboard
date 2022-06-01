@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import { GetTrams } from "../utils/helpers";
 
-
 export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => {
     const [solDepList, setSolDepList] = useState<string[]>([]);
     const [munkDepList, setMunkDepList] = useState<string[]>([]);
