@@ -16,6 +16,14 @@ export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => 
     }
     setLists(tramDataSolros, solrosList);
     setLists(tramDataMunk, munkList);
+
+    const arrayEquals = (a: string[], b: string[]) => {
+        return Array.isArray(a) &&
+            Array.isArray(b) &&
+            a.length === b.length &&
+            a.every((val, index) => val === b[index]);
+    }
+
     const calcSolDepTime = (departures: any) => {
         solrosList = [];
         departures.forEach((dep: any, index: number) => {
@@ -37,7 +45,9 @@ export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => 
                 solrosList.push(resultInMinutes)
             }
         })
-        setSolDepList(solrosList);
+        if (!arrayEquals(solDepList, solrosList)) {
+            setSolDepList(solrosList);
+        }
     }
 
     const calcMunkDepTime = (departures: any) => {
@@ -61,7 +71,9 @@ export const TramDeparture: React.FC<any> = ({tramDataSolros, tramDataMunk}) => 
                 munkList.push(Math.round(resultInMinutes))
             }
         })
-        setMunkDepList(munkList);
+        if (!arrayEquals(munkDepList, munkList)) {
+            setMunkDepList(munkList);
+        }
     }
     setInterval(() => {
         calcSolDepTime(tramDataSolros.Departure);

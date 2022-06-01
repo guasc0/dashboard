@@ -27,7 +27,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000 * 12)
+        }, 60000)
     }, []);
     useEffect(() => {
         setInterval(() => {
@@ -42,7 +42,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000 * 12);
+        }, 60000);
     }, []);
     useEffect(() => {
         setInterval(() => {
@@ -57,7 +57,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000 * 12);
+        }, 60000);
     }, []);
 
     return (
