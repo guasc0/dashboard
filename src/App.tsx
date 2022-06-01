@@ -6,7 +6,6 @@ import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {CurrentWeather} from "./containers/currentWeather";
 import {ThreeDayWeather} from "./containers/threeDayWeather";
-import {useGetTramsFromMunk, useGetTramsFromSolros, useGetWeather} from "./hooks/useGetWeather";
 import {TramDeparture} from "./containers/tramDeparture";
 import axios from 'axios';
 
@@ -27,7 +26,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000)
+        }, 60000 * 12)
     }, []);
     useEffect(() => {
         setInterval(() => {
@@ -42,7 +41,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000);
+        }, 60000 * 12);
     }, []);
     useEffect(() => {
         setInterval(() => {
@@ -57,7 +56,7 @@ function App() {
                     console.log(err);
                     toast.error('Error loading data, check the spellings');
                 });
-        }, 60000);
+        }, 60000 * 12);
     }, []);
 
     return (

@@ -17,7 +17,7 @@ export const ThreeDayWeather: React.FC<any> = ({data, city}) => {
     return (
         <>
             <div style={{paddingLeft: 20}}>
-                <h2 style={{color: "white"}}>2 Day forecast for {city}</h2>
+                <h2 style={{color: "white"}}>Väder 2 dagar frammåt</h2>
                 {data &&
                     <>
                         <div style={{display: "flex", justifyContent: 'space-between', width: 650}}>
